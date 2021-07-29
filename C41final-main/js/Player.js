@@ -34,13 +34,13 @@ class Player {
         finishedPlayers = data.val();
     });
 }
-/*
+
 static updateFinishedPlayers(){
     database.ref('/').update({
         finishedPlayers: finishedPlayers + 1
     });
     this.place += 1;
-}*/
+}
 
 
   static getPlayerInfo(){

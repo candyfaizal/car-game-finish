@@ -44,6 +44,7 @@ class Game {
             form.hide();
         
             Player.getPlayerInfo();
+            player.getFinishedPlayers();
             
             if(allPlayers !== undefined){
               //var display_position = 100;
@@ -86,7 +87,7 @@ class Game {
             }
         
             
-            if(player.distance < 4006){
+            if(player.distance < 4500){
               car_sound.play()
               if(keyIsDown(38) && player.index !== null){
                   yVel += 0.9;
@@ -103,8 +104,21 @@ class Game {
                   yVel *= 0.985;
                   xVel *= 0.985;
               }
+
+            }else if (passedfinish===false)
+            {
+              yVel=yVel*0.7;
+              xVel=xVel*0.7;
+              Player.updateFinishedPlayers()
+              player.place=finishedPlayers
+              player.update()
+              passedfinish=true
             }
-        
+          else{
+            yVel=yVel*0.8
+            xVel=xVel*0.8
+          }
+
           //move the car
           player.distance += yVel;
           yVel *= 0.98;
@@ -115,5 +129,34 @@ class Game {
           drawSprites();
         }
            
-      
+        
+        displayRanks(){
+          //display the medals
+          camera.position.y = 0;
+          camera.position.x = 0;
+  
+          imageMode(CENTER);
+  
+          Player.getPlayerInfo();
+  
+          image(bronze_img, displayWidth/-4, -100 + displayHeight/9, 200, 240);
+          image(silver_img, displayWidth/4, -100 + displayHeight/10, 225, 270);
+          image(gold_img, 0, -100, 250, 300);
+  
+          textAlign(CENTER);
+          textSize(50);
+          for(var plr in allPlayers){
+              if(allPlayers[plr].place === 1){
+                  text("1st: " + allPlayers[plr].name, 0, 85);
+              }else if(allPlayers[plr].place === 2){
+                  text("2nd: " + allPlayers[plr].name, displayWidth/4, displayHeight/9 + 73);
+              }else if(allPlayers[plr].place === 3){
+                  text("3rd: " + allPlayers[plr].name, displayWidth/-4, displayHeight/10 + 76);
+              }else{
+                  textSize(30);
+                  text("Honorable Mention: " + allPlayers[plr].name, 0, 225);
+              }
+          }
+      }
         }
+      

@@ -8,6 +8,8 @@ var database;
 var obstale,obstale_Image;
 var obstalegroup;
 var car_sound,stop_Sound
+var passedfinish=false
+var gold_img,silver_img,bronze_img
 
 var form, player, game;
 
@@ -22,6 +24,9 @@ function preload(){
   car4_img = loadImage("images/car4.png");
   ground = loadImage("images/ground.png");
   obstale_Image = loadImage("images/f1.png")
+  gold_img = loadImage("images/gold.png")
+  silver_img = loadImage("images/silver.png")
+  bronze_img = loadImage("images/bronze.png")
   car_sound = loadSound("sound/car.mp3")
   stop_Sound = loadSound("sound/sliding.mp3")
 }
@@ -31,12 +36,14 @@ function setup(){
   database = firebase.database();
   gameState = 0;
   distance = 0;
- // finishedPlayers = 0;
+  finishedPlayers = 0;
   yVel = 0;
   xVel = 0;
 
   xSet = false;
   game = new Game();
+  form=new Form();
+  player=new Player();
   game.getState();
   game.start();
 
@@ -61,7 +68,7 @@ function draw(){
    
 
    //start the game
-   if (playerCount === 2 ) {
+   if (playerCount === 2&&finishedPlayers===0 ) {
      game.update(1);
    }
  
@@ -69,8 +76,9 @@ function draw(){
    if (gameState === 1) {
      game.play();
    }
-   if (gameState === 2) {
-     console.log("End");  
+   if (finishedPlayers === 2) {
+   game.update(2) 
+   game.displayRanks();
 
    }
    drawSprites();
